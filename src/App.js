@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
+import "animate.css/animate.css";
+import _ from 'lodash';
 import Cookie from 'js-cookie';
 import Gzip from './components/gzip';
 import Cache from './components/cache';
@@ -41,11 +43,30 @@ class App extends Component {
                         <input className="form-check-input" checked={this.state.gzip} onClick={()=>this.setState({gzip: !this.state.gzip})} type="checkbox"/> Gzip support
                       </label>
                     </div>
+                    {this.state.gzip && <div>
+                    <div className="form-group">
+                        <input className="form-control" defaultValue={this.state.gzip_level || 1}  onChange={(event)=>this.setState({gzip_level: event.target.value})} type="number" max="9" min="1" placeholder="Compression level"/> 
+                    </div>
+                    <div className="form-group">
+                        <input className="form-control" defaultValue={this.state.gzip_min_length || 256} onChange={(event)=>this.setState({gzip_min_length: event.target.value})} type="number" placeholder="Gzip min length"/> 
+                    </div>
+                    </div>}
                     <div className="form-check">
                       <label className="form-check-label">
                         <input className="form-check-input" checked={this.state.https} onClick={()=>this.setState({https: !this.state.https})} type="checkbox"/> HTTPs Support
                       </label>
                     </div>
+                    {this.state.https && <div className="animated slideInLeft">
+                    <div className="form-group">
+                        <input className="form-control" value={this.state.https_fullChain} onChange={(event)=>this.setState({https_fullChain: event.target.value})} type="text" placeholder="Path to full chain"/> 
+                    </div>
+                    <div className="form-group">
+                        <input className="form-control" value={this.state.https_privKey} onChange={(event)=>this.setState({https_privKey: event.target.value})} type="text" placeholder="Path to priv key"/> 
+                    </div>
+                    <div className="form-group">
+                        <input className="form-control" value={this.state.https_include} onChange={(event)=>this.setState({https_include: event.target.value})} type="text" placeholder="Path to optional config"/> 
+                    </div>
+                    </div>}
                     <div className="form-check">
                       <label className="form-check-label">
                         <input className="form-check-input" checked={this.state.http2https} onClick={()=>this.setState({http2https: !this.state.http2https})} type="checkbox"/> HTTP to HTTPs
@@ -96,16 +117,14 @@ class App extends Component {
           </div>
           <div className="col-12 col-md-6">
             <div className="jumbotron" style={{height: '100%' }}>
-
-            
               { this.state.gzip && <Gzip />}
               { this.state.cache && <Cache />}
-              { this.state.https && <Https />}
+              { this.state.https && <Https paths={_.pick(this.state,['https_fullChain', 'https_include', 'https_privKey'])} />}
               { this.state.http2https && <Http2Https />}
               { this.state.www && <WWW type={this.state.www}/>}
-              {this.state.phpfpm && <Fpm/>}
-              { this.state.root && <Root />}
-              { this.state.website && <Website />}
+              { this.state.phpfpm && <Fpm/>}
+              { this.state.root && <Root dir={this.state.root} />}
+              { this.state.website && <Website name={this.state.website} />}
               { this.state.disable_log && <DisableLog />}
             </div>
           </div>

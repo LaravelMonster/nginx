@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default() => {
+export default (props) => {
     return <div className="animated fadeInRight">
-server_name example.com;
+        server_name {props.name};
     </div>
 }

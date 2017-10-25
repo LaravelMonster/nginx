@@ -1,5 +1,5 @@
 import React from 'react'
 
-export default () =>{
+export default (props) =>{
 return <div className="animated fadeInRight" >Valid Cache content</div>
 }
