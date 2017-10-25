@@ -1,0 +1,13 @@
+server {
+        listen 80;
+        listen [::]:80;
+
+        
+        
+      
+        location / {
+                try_files $uri $uri/ /index.php?$query_string;
+        }
+        
+
+}
